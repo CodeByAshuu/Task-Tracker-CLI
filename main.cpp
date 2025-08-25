@@ -81,7 +81,7 @@ void saveTasks(const string& filename, const vector<Task>& tasks) {
     for (size_t i = 0; i < tasks.size(); i++) {
         const Task& t = tasks[i];
         file << "  {\n";
-        file << "    \"id\": " << t.id << ",\n";
+        file << "    \"id\": \"" << t.id << "\",\n";
         file << "    \"description\": \"" << t.description << "\",\n";
         file << "    \"status\": \"" << t.status << "\",\n";
         file << "    \"createdAt\": \"" << t.createdAt << "\",\n";
