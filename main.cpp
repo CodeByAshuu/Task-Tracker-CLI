@@ -66,3 +66,23 @@ vector<Task> loadTasks(const string& filename) {
     }
     return tasks;
 }
+
+// Saving tasks back to JSON file
+void saveTasks(const string& filename, const vector<Task>& tasks) {
+    std::ofstream file(filename, std::ios::trunc);
+    file << "[\n";
+    for (size_t i = 0; i < tasks.size(); i++) {
+        const Task& t = tasks[i];
+        file << "  {\n";
+        file << "    \"id\": " << t.id << ",\n";
+        file << "    \"description\": \"" << t.description << "\",\n";
+        file << "    \"status\": \"" << t.status << "\",\n";
+        file << "    \"createdAt\": \"" << t.createdAt << "\",\n";
+        file << "    \"updatedAt\": \"" << t.updatedAt << "\"\n";
+        file << "  }";
+        if (i < tasks.size() - 1) file << ",";
+        file << "\n";
+    }
+    file << "]\n";
+    file.close();
+}
