@@ -37,7 +37,8 @@ vector<Task> loadTasks(const string& filename) {
     while (getline(file, line)) json += line;
     file.close();
 
-    if (json.size() < 5) return tasks; // empty
+    if (json.size() < 5 || json.find("{") == string::npos) 
+        return tasks; // empty
 
     size_t pos = 0;
     while ((pos = json.find("{", pos)) != string::npos) {
@@ -45,17 +46,22 @@ vector<Task> loadTasks(const string& filename) {
         size_t end = json.find("}", pos);
         string obj = json.substr(pos, end - pos);
 
-        // crude parsing (not a real JSON parser, but works for this format)
         auto extract = [&](const string& key) {
             size_t k = obj.find("\"" + key + "\"");
             if (k == string::npos) return string("");
             k = obj.find(":", k) + 1;
             size_t q1 = obj.find("\"", k);
             size_t q2 = obj.find("\"", q1 + 1);
+            if (q1 == string::npos || q2 == string::npos) return string("");
             return obj.substr(q1 + 1, q2 - q1 - 1);
         };
 
-        t.id = stoi(extract("id"));
+        auto safeStoi = [&](const string& s) -> int {
+            if (s.empty()) return 0;
+            return std::stoi(s);
+        };
+
+        t.id = safeStoi(extract("id"));
         t.description = extract("description");
         t.status = extract("status");
         t.createdAt = extract("createdAt");
@@ -66,6 +72,7 @@ vector<Task> loadTasks(const string& filename) {
     }
     return tasks;
 }
+
 
 // Saving tasks back to JSON file
 void saveTasks(const string& filename, const vector<Task>& tasks) {
