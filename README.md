@@ -40,7 +40,7 @@ cd Task-Tracker-CLI
 
 Using g++:
 ```bash
-g++ src/main.cpp -o task-cli
+g++ main.cpp -o task-cli
 ```
 
 (You’ll now have an executable file named task-cli)
