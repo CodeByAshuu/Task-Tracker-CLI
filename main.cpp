@@ -116,3 +116,17 @@ void updateTask(const string& filename, int id, const string& newDesc) {
     saveTasks(filename, tasks);
     cout << "Task updated successfully.\n";
 }
+
+
+// Delete a task
+void deleteTask(const string& filename, int id) {
+    auto tasks = loadTasks(filename);
+    auto it = std::remove_if(tasks.begin(), tasks.end(), [&](const Task& t){ return t.id == id; });
+    if (it == tasks.end()) {
+        cout << "Task not found.\n";
+        return;
+    }
+    tasks.erase(it, tasks.end());
+    saveTasks(filename, tasks);
+    cout << "Task deleted successfully.\n";
+}
