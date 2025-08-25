@@ -86,3 +86,33 @@ void saveTasks(const string& filename, const vector<Task>& tasks) {
     file << "]\n";
     file.close();
 }
+
+// add a new task
+void addTask(const string& filename, const string& description) {
+    auto tasks = loadTasks(filename);
+    int newId = tasks.empty() ? 1 : tasks.back().id + 1;
+    Task t { newId, description, "todo", getCurrentTime(), getCurrentTime() };
+    tasks.push_back(t);
+    saveTasks(filename, tasks);
+    cout << "Task added successfully (ID: " << newId << ")" << endl;
+}
+
+// Update task description
+void updateTask(const string& filename, int id, const string& newDesc) {
+    auto tasks = loadTasks(filename);
+    bool found = false;
+    for (auto& t : tasks) {
+        if (t.id == id) {
+            t.description = newDesc;
+            t.updatedAt = getCurrentTime();
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Task not found.\n";
+        return;
+    }
+    saveTasks(filename, tasks);
+    cout << "Task updated successfully.\n";
+}
