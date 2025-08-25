@@ -168,3 +168,33 @@ void listTasks(const string& filename, const string& filter = "") {
         }
     }
 }
+
+// Entry point
+int main(int argc, char* argv[]) {
+    string filename = "tasks.json";
+
+    if (argc < 2) {
+        cout << "Usage: task-cli <command> [options]\n";
+        return 1;
+    }
+
+    string cmd = argv[1];
+
+    if (cmd == "add" && argc >= 3) {
+        addTask(filename, argv[2]);
+    } else if (cmd == "update" && argc >= 4) {
+        updateTask(filename, std::stoi(argv[2]), argv[3]);
+    } else if (cmd == "delete" && argc >= 3) {
+        deleteTask(filename, std::stoi(argv[2]));
+    } else if (cmd == "mark-in-progress" && argc >= 3) {
+        markTask(filename, std::stoi(argv[2]), "in-progress");
+    } else if (cmd == "mark-done" && argc >= 3) {
+        markTask(filename, std::stoi(argv[2]), "done");
+    } else if (cmd == "list") {
+        if (argc == 3) listTasks(filename, argv[2]);
+        else listTasks(filename);
+    } else {
+        cout << "Invalid command or missing arguments.\n";
+    }
+    return 0;
+}
