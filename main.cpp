@@ -130,3 +130,23 @@ void deleteTask(const string& filename, int id) {
     saveTasks(filename, tasks);
     cout << "Task deleted successfully.\n";
 }
+
+// Change task status
+void markTask(const string& filename, int id, const string& newStatus) {
+    auto tasks = loadTasks(filename);
+    bool found = false;
+    for (auto& t : tasks) {
+        if (t.id == id) {
+            t.status = newStatus;
+            t.updatedAt = getCurrentTime();
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Task not found.\n";
+        return;
+    }
+    saveTasks(filename, tasks);
+    cout << "Task marked as " << newStatus << ".\n";
+}
