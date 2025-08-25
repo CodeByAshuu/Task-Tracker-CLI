@@ -50,11 +50,21 @@ vector<Task> loadTasks(const string& filename) {
             size_t k = obj.find("\"" + key + "\"");
             if (k == string::npos) return string("");
             k = obj.find(":", k) + 1;
-            size_t q1 = obj.find("\"", k);
-            size_t q2 = obj.find("\"", q1 + 1);
-            if (q1 == string::npos || q2 == string::npos) return string("");
-            return obj.substr(q1 + 1, q2 - q1 - 1);
+
+            // skip spaces
+            while (k < obj.size() && (obj[k] == ' ')) k++;
+
+            if (obj[k] == '"') { // value in quotes
+                size_t q1 = obj.find("\"", k);
+                size_t q2 = obj.find("\"", q1 + 1);
+                if (q1 == string::npos || q2 == string::npos) return string("");
+                return obj.substr(q1 + 1, q2 - q1 - 1);
+            } else { // numeric value
+                size_t end = obj.find_first_of(",}", k);
+                return obj.substr(k, end - k);
+            }
         };
+
 
         auto safeStoi = [&](const string& s) -> int {
             if (s.empty()) return 0;
