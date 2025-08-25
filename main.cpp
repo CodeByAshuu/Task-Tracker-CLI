@@ -150,3 +150,21 @@ void markTask(const string& filename, int id, const string& newStatus) {
     saveTasks(filename, tasks);
     cout << "Task marked as " << newStatus << ".\n";
 }
+
+// List tasks (all or filtered)
+void listTasks(const string& filename, const string& filter = "") {
+    auto tasks = loadTasks(filename);
+    if (tasks.empty()) {
+        cout << "No tasks found.\n";
+        return;
+    }
+    for (const auto& t : tasks) {
+        if (filter.empty() || t.status == filter) {
+            cout << "[" << t.id << "] "
+                 << t.description << " | "
+                 << t.status << " | "
+                 << "Created: " << t.createdAt
+                 << " | Updated: " << t.updatedAt << endl;
+        }
+    }
+}
